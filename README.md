@@ -62,10 +62,6 @@ npm run build
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
 ## Security
 
 - Never commit sensitive files like `credentials.json` or `token.json`
@@ -83,23 +79,4 @@ src/
   ├── types/         # TypeScript type definitions
   ├── App.tsx        # Main application component
   └── index.tsx      # Application entry point
-```
-
-## Available Scripts
-
-- `npm start` - Runs the app in development mode
-- `npm test` - Launches the test runner
-- `npm run build` - Builds the app for production
-- `npm run eject` - Ejects from Create React App
-
-## Browser Support
-
-The application is built to work in modern browsers that support:
-- ES6+ features
-- IndexedDB
-- Fetch API
-- File API
-
-## License
-
-MIT 
+``` 

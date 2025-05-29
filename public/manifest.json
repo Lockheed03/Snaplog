@@ -1,6 +1,8 @@
 {
   "short_name": "Snaplog",
   "name": "Snaplog - Image Management",
+  "id": "snaplog-app",
+  "description": "Snaplog is a powerful image management application that helps you organize and manage your images with Google Drive integration.",
   "icons": [
     {
       "src": "favicon.ico",
@@ -21,5 +23,18 @@
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "background_color": "#ffffff",
+  "orientation": "portrait",
+  "screenshots": [
+    {
+      "src": "screenshot1.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "platform": "wide",
+      "label": "Snaplog Home Screen"
+    }
+  ],
+  "launch_handler": {
+    "client_mode": "auto"
+  }
 } 
