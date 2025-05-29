@@ -48,12 +48,6 @@ REACT_APP_GOOGLE_CLIENT_ID=your_client_id
 REACT_APP_GOOGLE_API_KEY=your_api_key
 ```
 
-## Building for Production
-
-```bash
-npm run build
-```
-
 ## Project Structure
 
 ```
