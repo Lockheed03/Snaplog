@@ -65,7 +65,4 @@ src/
   ├── types/         # TypeScript type definitions
   ├── App.tsx        # Main application component
   └── index.tsx      # Application entry point
-<<<<<<< HEAD
 ``` 
-=======
-```
