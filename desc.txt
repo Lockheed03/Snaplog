@@ -1,0 +1,174 @@
+I want you to generate a complete React + TypeScript project scaffold—using Material-UI for styling and React Router for page navigation—that implements the entire “Snaplog” concept as described below (referencing the attached spec :contentReference[oaicite:0]{index=0}). The code must run in a modern browser (no Node-only modules), and use Webpack (with its browser polyfills) to bundle.
+
+---  
+# 1. Project & Env Setup  
+- Create a new React app with TypeScript support.  
+- Include a `.env` file with: ( i have already made this) 
+  REACT_APP_GOOGLE_CLIENT_ID=671161549232-9b8cs446k7hidkeaqsp37sph479904li.apps.googleusercontent.com  
+  REACT_APP_GOOGLE_API_KEY=AIzaSyDB4GSRpVI-vTIMrmv1cTKavU4BEE6HY3E  
+
+---  
+# 2. Authentication & Drive API  
+- Use Google OAuth2 via `gapi-script`.  
+- On app start, load and init `gapi.client` with `apiKey`, `clientId` and the scopes:  
+  - `https://www.googleapis.com/auth/drive.file`  
+  - `https://www.googleapis.com/auth/drive`  
+- Provide **Login** and **Logout** buttons.  
+- After login, store the access token in React Context (or a global store) and make it available to all components.  
+- Implement a `driveService.ts` module that:  
+  1. On first run, creates “Snaplog” root folder with subfolders “Inventory” and “Entries” in the user’s Google Drive.  
+  2. Exposes methods:  
+     - `listFiles(folderId: string)`: returns `id`, `name`, `webContentLink`.  
+     - `createFolder(name: string, parentId?: string)`: returns new folder ID.  
+     - `uploadFile(file: File, parentId: string)`: multipart upload with metadata.  
+     - `deleteFile(fileId: string)`.  
+
+---  
+# 3. Data Model & Naming  
+- Define TypeScript interfaces:  
+  ```ts
+  interface Entry {
+    id: string
+    name: string // e.g., "9_5_3_FRI"
+    date: string // ISO string
+    itemCount: number
+  }
+  interface InventoryItem {
+    id: string
+    name: string
+    webContentLink: string
+    description?: string
+  }
+
+When saving an entry, generate name as:
+"{day}_{month}_{x}_{WEEKDAY}"
+day = date.getDate()
+month = date.getMonth() + 1
+x = number of images selected
+WEEKDAY = ["SUN","MON","TUE","WED","THU","FRI","SAT"][date.getDay()]
+
+4. Page Structure & Routing
+Use React Router to define these routes/pages:
+
+Home (/)
+
+Three big Material-UI buttons:
+
+“View Entry History” → /history
+
+“Add Entry” → /add
+
+“Inventory” → /inventory
+
+View Entry History (/history)
+
+Top nav bar:
+
+Left: Back button (←) to /
+
+Right: Sort toggle (A→Z / Z→A) by name.
+
+Below: list of entries sorted by creation date (newest first).
+
+Each entry displays its name.
+
+Long-press (or click “Select” icon) to enable multi-select checkboxes; show a trash icon in the nav bar right when any selected; clicking trash deletes selected entries via driveService.deleteFile.
+
+Clicking an entry navigates to Entry Detail /history/:entryId.
+
+Entry Detail (/history/:entryId)
+
+Back button to /history.
+
+Fetch all images for this entry from the “Entries” folder (query by the entry’s name prefix or stored mapping).
+
+Display images in a responsive grid (Material-UI ImageList).
+
+Add Entry (/add)
+
+Two controls vertically:
+
+Date picker (<TextField type="date">), default = today, editable.
+
+“Select Items” button → /add/items.
+
+Items Selection (/add/items)
+
+Back button to /add.
+
+Fetch and display all inventory images (from “Inventory” folder) in a grid.
+
+Single click selects/unselects an image (highlight border).
+
+Below grid: “Save” and “Back” buttons.
+
+Save:
+
+Generate Entry name and metadata.
+
+Copy selected images from “Inventory” to “Entries” folder via driveService.uploadFile with new filenames.
+
+Redirect to /history.
+
+Back: go back to /add.
+
+Inventory (/inventory)
+
+Back button to /.
+
+Top-right “+” button opens file picker to upload new image(s) to “Inventory” folder.
+
+Display inventory images in a grid.
+
+Long-press or “Select” icon to multi-select; show trash icon to delete selected images from Drive.
+
+5. Offline Caching & Local Storage
+Cache image metadata and folder IDs in localStorage or IndexedDB.
+
+Preload thumbnails for offline viewing.
+
+On each app start, sync local cache with Drive (only changed items).
+
+6. Webpack & Browser Compatibility
+Configure Webpack with standard Create-React-App or custom config.
+
+Enable necessary polyfills for browser (per official CRA polyfills).
+
+No use of Node.js–only modules like fs, path, or events in code.
+
+7. Responsive Design
+Ensure all pages render well on mobile (small) and desktop (large) viewports.
+
+Use Material-UI Grid and breakpoints.
+
+8. Code Organization
+/src/hooks/useGoogleAuth.ts
+
+/src/services/driveService.ts
+
+/src/types/index.ts
+
+/src/pages/Home.tsx, History.tsx, EntryDetail.tsx, AddEntry.tsx, Items.tsx, Inventory.tsx
+
+/src/components/NavBar.tsx, ImageGrid.tsx, EntryList.tsx
+
+9. README & Scripts
+In README.md, document:
+
+.env setup
+
+npm install / npm start
+
+Folder structure summary
+
+Include scripts: start, build, test.
+
+Deliver fully working boilerplate code, ready to npm install and npm start, covering every behavior and naming rule above. Ensure no Node-only imports, and that it builds cleanly in a browser environment.
+
+Ensure:
+- All image filenames in the “Entries” folder are prefixed with their corresponding entry name (e.g., "9_5_3_FRI_img1.jpg") for easy retrieval.
+- The "Snaplog" folder structure is created only once per user session and persists across logins.
+- Image thumbnails are preloaded and locally cached for offline viewing.
+- If the app is offline, display the last synced entries and inventory from local storage.
+- Do not use or import any Node.js built-in modules like 'node:events', 'node:fs', 'node:util', or 'node:process' anywhere in the project.
+- Long-press is implemented using browser-compatible `onMouseDown` / `onTouchStart` logic with a timeout fallback.

@@ -1,0 +1,102 @@
+i want to build a website with the following concept. i will explain to you the concept step by step, and at the last i will summarize the pages by providing the page wise mapping of the website.
+
+okay so imagine home page 
+
+on home page there should be 3 buttons, 
+1) View entry history 
+2) Add entry
+3) Inventory
+
+## when clicked on view entry history, 
+it shows a sorted list of last added entry
+above these list of entries, is a navigation bar
+on right hand side give option to sort name wise ascending or descending.
+on left hand side give option to go back.
+below the nav bar are the listed entries, these entries have a special custom name explained below. 
+here when the user long press hold on any listed entry then a check box appears and the dust bin icon appears on the nav bar(right hand side) 
+now you can select the entries you want to delete and once the entries have been selected and the dustbin icon has been clicked, the entries are deleted from the history.
+
+and the entries should be stored as such: 
+suppose for example i am saving an entry today(9/5/2025) then the nomenclature should be as such
+"9_5_x_DAY" here 9 is the day, 5 is the month, x is the number of items selected during "Add entry", 
+DAY is 
+MON for Monday
+TUE for Tuesday
+WED for Wednesday
+THU for Thursday
+FRI for Friday
+SAT for Saturday
+SUN for Sunday
+
+thus this is how the entries are to be stored in a list, when any entry in the list is clicked on for example "9_5_3_FRI" is clicked upon then this leads to a new page,
+this new page shall show the images selected while making the entry.  these images are to be shown in a grid like structure, as the example has 3 in the name thus there are 3 images to be shown.
+
+All images are stored in Google Drive in a structured folder hierarchy:
+- Main folder: "Snaplog"
+  - Subfolder: "Inventory" (for storing all inventory images)
+  - Subfolder: "Entries" (for storing all entry-related images)
+
+## when clicked on Add entry
+you are offered 2 buttons, 
+1) Date
+2) Items
+
+first would be the date, it is an input field with type=date,
+which by default would be the current date, but the date is editable, 
+thus if the user wants to edit the date they can edit it, as it shall be stored as per the user's choice.
+
+secondly when clicked on items, you are lead to a new page containing all the images in the inventory, on a single click on any image, the image is selected, 
+once all the images the user wants to select have been selected, the user can choose the options offered above. that is "Save" and "Back" when clicked on save, 
+the entry is generated where all the images are mapped which were selected and stored, this entry can be viewed when the user chooses "View entry history", 
+when user clicks on "Back" go to previous page
+
+## when clicked on Inventory
+you are directly shown the images (in grid like structure similar to how you can see images in the gallery of your phone) which you have uploaded previously (if any)
+above in the nav bar you are shown an "+" option, when clicked you can add any image from your local device to your inventory.
+long press on any image selects it and once at least 1 image is selected then you are offered a dustbin icon when clicked on, deleted those images from the inventory
+
+The inventory images are stored in the "Inventory" folder in Google Drive, and when images are selected for an entry, they are copied to the "Entries" folder with appropriate naming.
+
+### all pages other than the home page should have "Back" button which moves the user to the previous page.
+
+### Authentication and Storage
+- The application uses Google OAuth2 for authentication
+- All images are stored in Google Drive
+- The folder structure is automatically created when a user first accesses the app
+- Images are cached locally for offline access
+- The app maintains a consistent folder structure across sessions
+
+thus the following is the page wise mapping of our app
+
+HOME page-1 (directly opened when user opens the app)
+	1) View entry history 
+	2) Add entry 
+	3) Inventory
+
+VIEW HISTORY page-2 (when first option selected)
+	(list of all previously existing entries, here you can add new entries and delete old entries too, and you click back to go back to home page)
+	when clicked on any entry
+		entry specific name page-3
+			(this page displays all the images which were selected while making the entry)
+
+ADD ENTRY page-4 (when second option selected)
+	1) Date (enter date into the input field, by default the current date)
+	2) Items (once clicked leads to item page)
+		ITEMS page-5
+			(list of all the images present in the inventory, single click on image selects it, once clicked on save, generate entry in the VIEW HISTORY page-2)
+			(display the images from the inventory similar to how android display image sin the gallery in grid like structure)
+INVENTORY page-6 (all images uploaded by the user shown here)
+	(you are given a + symbol to add any new images, or you can select and then delete pre existing images in the inventory)
+
+### Technical Implementation Details
+- React with TypeScript for the frontend
+- Material-UI for the user interface components
+- Google Drive API for file storage and management
+- OAuth2 for authentication
+- Webpack with polyfills for browser compatibility
+- Local storage for caching and offline access
+- Responsive design for mobile and desktop views
+
+// .env has following contents
+REACT_APP_GOOGLE_CLIENT_ID=671161549232-9b8cs446k7hidkeaqsp37sph479904li.apps.googleusercontent.com
+REACT_APP_GOOGLE_API_KEY=AIzaSyDB4GSRpVI-vTIMrmv1cTKavU4BEE6HY3E
